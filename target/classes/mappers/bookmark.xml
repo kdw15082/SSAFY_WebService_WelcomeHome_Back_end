@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.happyhouse.mapper.BookMarkMapper">
+
+	<insert id="insert" parameterType="BookMarkDto">
+		INSERT INTO bookmark (email, aptCode)
+		VALUES (#{email}, #{aptCode})
+	</insert>
+
+	<delete id="delete" parameterType="int">
+		DELETE FROM bookmark
+		WHERE  no = #{no}
+	</delete>
+
+	<select id="getBookMarkByEmail" parameterType="String" resultType="BookMarkDto">
+		SELECT *
+		FROM   bookmark
+		WHERE  email = #{email} 
+	</select>
+
+	<select id="getBookMarkByCode" parameterType="int" resultType="int">
+		SELECT count(*)
+		FROM   bookmark
+		WHERE  aptCode = #{aptCode} 
+	</select>
+
+</mapper>

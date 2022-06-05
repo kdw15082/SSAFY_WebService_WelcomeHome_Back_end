@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.happyhouse.mapper.HouseDealMapper">
+
+	<select id="getAptByCode" parameterType="int" resultType="houseDealDto">
+		SELECT d.aptCode, d.dealType, d.area, d.dealYear, d.dealMonth,
+		 	   d.dealDay, d.deposit, d.rent, d.deal, d.floor,
+	       	   (SELECT aptName
+	        	FROM   houseinfo
+	        	WHERE  aptCode = d.aptCode) aptName
+		FROM   housedeal d
+		WHERE  aptCode = #{aptCode}
+		ORDER  BY dealYear DESC,
+		          dealMonth DESC,
+		          dealDay DESC 
+	</select>
+	
+	<select id="getAptByDealType" parameterType="Map" resultType="houseDealDto">
+		SELECT d.aptcode, d.dealType, d.area, d.dealYear, d.dealMonth,
+		 	   d.dealDay, d.deposit, d.rent, d.deal, d.floor,
+	       	   (SELECT aptName
+	        	FROM   houseinfo
+	        	WHERE  aptCode = d.aptCode) aptName
+		FROM   housedeal d
+		WHERE  aptCode = #{aptCode}1141011100
+		       AND dealType = #{dealType}
+		ORDER  BY dealYear DESC,
+		          dealMonth DESC,
+		          dealDay DESC 
+	</select>
+
+</mapper>

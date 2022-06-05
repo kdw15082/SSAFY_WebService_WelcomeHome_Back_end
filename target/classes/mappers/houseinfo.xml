@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.happyhouse.mapper.HouseInfoMapper">
+
+	<select id="getSido" resultType="sidoGugunCodeDto">
+		SELECT LEFT(sidoCode, 2) sidoCode, sidoName
+		FROM   sidocode
+		ORDER  BY sidoCode 
+	</select>
+
+	<select id="getGugunInSido" parameterType="string" resultType="sidoGugunCodeDto">
+		SELECT LEFT(gugunCode, 5) gugunCode, gugunName
+		FROM   guguncode
+		WHERE  LEFT(gugunCode, 2) = #{sido}
+		ORDER  BY gugunCode 
+	</select>
+
+	<select id="getDongInGugun" parameterType="string" resultType="houseInfoDto">
+		SELECT DISTINCT dongName, dongCode
+		FROM   houseinfo
+		WHERE  LEFT(dongCode, 5) = #{gugun}
+		ORDER  BY dongName 
+	</select>
+
+	<select id="getAllApt" resultType="houseInfoDto">
+		SELECT *
+		FROM   houseinfo
+		ORDER  BY aptName 
+	</select>
+
+	<select id="getAptInDong" parameterType="string" resultType="houseInfoDto">
+		SELECT *
+		FROM   houseinfo
+		WHERE  dongCode = #{dong}
+		ORDER  BY aptName 
+	</select>
+
+	<select id="getAptByName" parameterType="string" resultType="houseInfoDto">
+		SELECT *
+		FROM   houseinfo
+		WHERE  aptName LIKE Concat('%', #{aptName}, '%')
+		ORDER  BY aptName 
+	</select>
+	
+	<select id="getAptByType" parameterType="string" resultType="houseInfoDto">
+		SELECT *
+		FROM   houseinfo
+		WHERE  type = #{type}
+		ORDER  BY aptName 
+	</select>
+	
+	<select id="getAptByAptCode" parameterType="int" resultType="houseInfoDto">
+		SELECT *
+		FROM   houseinfo
+		WHERE  aptCode = #{aptCode} 
+	</select>
+
+</mapper>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.happyhouse.mapper.StatsMapper">
+
+	<!-- 통계 전체 조회 -->
+	<select id="getAllStats" resultType="StatsDto">
+		SELECT *
+		FROM   stats
+	</select>
+	
+	<!-- 통계 최근 한달 조회 -->
+	<select id="get30Daystats" resultType="StatsDto">
+		SELECT *
+		FROM   stats
+		WHERE  date BETWEEN DATE_ADD(NOW(), INTERVAL -1 MONTH ) AND NOW();
+	</select>
+
+	<!-- 월간 통계 조회 -->
+	<select id="getMonthStats" resultType="StatsDto">
+		SELECT MONTH(date) AS date, 
+			   sum(regist) regist, 
+			   sum(quit) quit, 
+			   sum(access) access,
+			   sum(home) home, 
+			   sum(board) board,
+			   sum(qna) qna,
+			   sum(notice) notice,
+			   sum(mypage) mypage,
+			   sum(aptlist) aptlist,
+			   sum(bookmark) bookmark
+		FROM   stats
+		GROUP  BY MONTH(date);
+	</select>
+	
+	<!-- 주간 통계 조회 -->
+	<select id="getWeekStats" resultType="StatsDto">
+		SELECT DATE_FORMAT(DATE_SUB(date, INTERVAL (DAYOFWEEK(date)-2) DAY), '%Y/%m/%d') as start,
+			   DATE_FORMAT(DATE_SUB(date, INTERVAL (DAYOFWEEK(date)-8) DAY), '%Y/%m/%d') as end,
+			   DATE(date),
+			   sum(regist) regist, 
+			   sum(quit) quit, 
+			   sum(access) access,
+			   sum(home) home, 
+			   sum(board) board,
+			   sum(qna) qna,
+			   sum(notice) notice,
+			   sum(mypage) mypage,
+			   sum(aptlist) aptlist,
+			   sum(bookmark) bookmark
+		FROM   stats
+		GROUP  BY date
+	</select>
+	
+	<!-- 일간 통계 조회 -->
+	<select id="getDayStats" resultType="StatsDto">
+		SELECT DATE(date) AS date, 
+			   regist, 
+			   quit, 
+			   access, 
+			   home, 
+			   board, 
+			   qna, 
+			   notice, 
+			   mypage, 
+			   aptlist, 
+			   bookmark
+		FROM   stats
+		GROUP  BY date
+	</select>
+	
+	<!-- 접속자 수 증가 -->
+	<update id="updateCnt" parameterType="String">
+		UPDATE stats
+		SET    ${page} = ${page} + 1
+		WHERE  date = curdate()
+	</update>
+	
+	<!-- 통계 등록 -->
+	<insert id="insert">
+		INSERT INTO stats(date, regist, quit, access, home, board, qna, notice, mypage, aptlist, bookmark) 
+		VALUES (curdate(), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0) 
+	</insert>
+	
+	<!-- 당일 통계 조회 -->
+	<select id="searchByDate" resultType="StatsDto">
+		SELECT *
+		FROM   stats
+		WHERE  date = curdate() 
+	</select>
+
+</mapper>

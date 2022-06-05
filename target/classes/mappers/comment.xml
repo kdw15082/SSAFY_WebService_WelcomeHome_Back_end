@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.happyhouse.mapper.CommentMapper">
+
+	<!-- 게시글 번호로 검색하여 조회한다. -->
+	<select id="searchByBoardNo" parameterType="int" resultType="CommentDto">
+		SELECT *
+		FROM   comment
+		WHERE  bno = #{bno} 
+	</select>
+
+	<!-- 댓글 등록 -->
+	<insert id="insert" parameterType="CommentDto">
+		INSERT INTO comment(bno, nickname, content, date)
+		VALUES (#{bno}, #{nickname}, #{content}, Now())
+	</insert>
+
+	<!-- 댓글 상세 조회 -->
+	<select id="searchByOne" parameterType="int" resultType="CommentDto">
+		SELECT *
+		FROM  comment
+		WHERE cno = #{cno}
+	</select>
+
+	<!-- 댓글 수정 -->
+	<update id="update" parameterType="CommentDto">
+		UPDATE comment
+		SET    bno = #{bno},
+		       nickname = #{nickname},
+		       content = #{content}
+		WHERE  cno = #{cno} 
+	</update>
+
+	<!-- 댓글 삭제 -->
+	<delete id="delete" parameterType="int">
+		DELETE FROM comment
+		WHERE  cno = #{cno} 
+	</delete>
+
+</mapper>
